@@ -3,6 +3,7 @@ class CustomField < ApplicationRecord
 
   enum value_type: { number: 0, text: 1, enum: 2 }
 
+  validates :name, presence: true
   validates :value, presence: true
   validates :value_type, presence: true
 
@@ -18,4 +19,5 @@ class CustomField < ApplicationRecord
       errors.add(:value, "must be a comma-separated list for enum type") unless value.to_s.include?(',')
     end 
   end
+
 end
