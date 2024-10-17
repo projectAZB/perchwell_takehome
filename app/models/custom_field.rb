@@ -1,6 +1,5 @@
 class CustomField < ApplicationRecord
   belongs_to :client
-  has_and_belongs_to_many :buildings
 
   enum value_type: { number: 0, text: 1, enum: 2 }
 
