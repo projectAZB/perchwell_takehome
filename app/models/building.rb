@@ -6,6 +6,7 @@ class Building < ApplicationRecord
   validates :zip_code, presence: true, format: { with: /\A\d{5}(-\d{4})?\z/, message: "Must be a valid US ZIP code" }
 
   validate :custom_field_values_belong_to_client
+  validate :custom_field_values_are_valid_types
 
   before_validation :normalize_state
   before_save :normalize_address
@@ -18,6 +19,34 @@ class Building < ApplicationRecord
     if invalid_ids.any?
       errors.add(:custom_field_values, "contains invalid custom field ids: #{invalid_ids.join(', ')}")
     end
+  end
+
+  def custom_field_values_are_valid_types
+    custom_fields.each do |cf|
+      value = custom_field_values[cf.id.to_s]
+
+      if value.nil?
+        errors.add(:custom_field_values, "#{cf.id} cannot be nil")
+        next
+      end
+
+      case cf.value_type.to_sym
+      when :number
+        unless value.to_s.match?(/\A-?\d+(\.\d+)?\z/)
+          errors.add(:custom_field_values, "#{cf.id} must be a number")
+        end
+      when :text
+        # Always valid if non-nil bc it's text
+      when :enum
+        unless cf.value.split(",").map(&:strip).include?(value.to_s)
+          errors.add(:custom_field_values, "#{cf.id} must be one of #{cf.value}")
+        end
+      end
+    end
+  end
+
+  def custom_fields
+    @custom_fields ||= CustomField.where(id: custom_field_values.keys)
   end
 
   def normalize_state
