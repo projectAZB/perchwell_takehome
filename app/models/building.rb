@@ -14,6 +14,7 @@ class Building < ApplicationRecord
   private
 
   def custom_field_values_belong_to_client
+    return if custom_field_values.blank?
     custom_field_ids = custom_field_values.keys.map(&:to_i)
     invalid_ids = custom_field_ids - client.custom_fields.pluck(:id)
     if invalid_ids.any?
@@ -22,6 +23,7 @@ class Building < ApplicationRecord
   end
 
   def custom_field_values_are_valid_types
+    return if custom_field_values.blank?
     custom_fields.each do |cf|
       value = custom_field_values[cf.id.to_s]
 
