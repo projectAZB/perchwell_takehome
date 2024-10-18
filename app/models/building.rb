@@ -37,7 +37,7 @@ class Building < ApplicationRecord
         end
       when :text
         # Always valid if non-nil bc it's text
-      when :enum
+      when :enum_type
         unless cf.value.split(",").map(&:strip).include?(value.to_s)
           errors.add(:custom_field_values, "#{cf.id} must be one of #{cf.value}")
         end
