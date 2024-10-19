@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :buildings, only: [:create, :update, :index]
   get "welcome/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -13,4 +12,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "welcome#index"
+
+  resources :clients, only: [:index]
+
+  resources :clients do
+    resources :buildings, only: [:index, :show, :create, :update]
+    resources :custom_fields, only: [:index, :show, :create, :update]
+  end
+
 end

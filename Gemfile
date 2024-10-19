@@ -50,6 +50,9 @@ group :development, :test do
   # Install RSpec
   gem "rspec-rails", "~> 6.0"
 
+  # Install FactoryBot
+  gem "factory_bot_rails"
+
 end
 
 group :development do

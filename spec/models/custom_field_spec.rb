@@ -1,4 +1,3 @@
-# spec/models/custom_field_spec.rb
 require "rails_helper"
 
 RSpec.describe CustomField, type: :model do
