@@ -13,6 +13,10 @@ const EditBuilding = () => {
     fetchBuildingAndCustomFields();
   }, [clientId, buildingId]);
 
+  const getCsrfToken = () => {
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+  };
+
   const fetchBuildingAndCustomFields = async () => {
     setIsLoading(true);
     try {
@@ -59,6 +63,7 @@ const EditBuilding = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-Token': getCsrfToken(),
         },
         body: JSON.stringify(building),
       });

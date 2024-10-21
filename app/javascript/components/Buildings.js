@@ -18,6 +18,10 @@ const Buildings = () => {
     fetchBuildings();
   }, [clientId]);
 
+  const getCsrfToken = () => {
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+  };
+
   const fetchBuildings = async (page = 1) => {
     setIsLoading(true);
     try {
@@ -49,6 +53,9 @@ const Buildings = () => {
       try {
         const response = await fetch(`/clients/${clientId}/buildings/${buildingId}`, {
           method: 'DELETE',
+          headers: {
+            'X-CSRF-Token': getCsrfToken(),
+          },
         });
         if (!response.ok) {
           throw new Error('Failed to delete building');
