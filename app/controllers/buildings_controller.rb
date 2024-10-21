@@ -1,6 +1,8 @@
 class BuildingsController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
   before_action :set_client
-  before_action :set_building, only: [:show, :update]
+  before_action :set_building, only: [:show, :update, :destroy]
 
   def index
     @buildings = @client.buildings.page(params[:page]).per(10)
@@ -34,6 +36,14 @@ class BuildingsController < ApplicationController
     end
   end
 
+  def destroy
+    if @building.destroy
+      render json: { message: 'Building successfully deleted' }, status: :ok
+    else
+      render json: { errors: @building.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_client
@@ -42,6 +52,10 @@ class BuildingsController < ApplicationController
 
   def set_building
     @building = @client.buildings.find(params[:id])
+  end
+
+  def record_not_found
+    render json: { error: 'Building not found' }, status: :not_found
   end
 
   def building_params

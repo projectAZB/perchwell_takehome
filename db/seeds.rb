@@ -11,6 +11,7 @@ puts "Seeding the database with clients, buildings and custom fields..."
 client_names =  ["Mark Jones", "Tom Dooley", "Stan Folie", "Jon Jackson", "Pierre Janet"]
 clients = []
 
+# Seed Clients
 client_names.each_with_index do |client_name, i|
   client = Client.create!(
     id: i + 1,
@@ -22,6 +23,7 @@ rescue ActiveRecord::RecordInvalid => e
   puts "Failed to create client #{i + 1}: #{e.message}"
 end
 
+# Seed Custom Fields
 clients.each do |client|
   if client.id == 1
     CustomField.create!(
@@ -110,7 +112,9 @@ clients.each do |client|
   end
 end
 
-puts "Seeding completed!"
+# Seed Buildings
+clients.each do |client|
+  
+end
 
-# Output the total number of clients
-puts "Total number of clients: #{Client.count}"
+puts "Seeding completed!"

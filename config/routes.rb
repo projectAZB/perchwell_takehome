@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest  
 
   resources :clients, only: [:index] do
-    resources :buildings, only: [:index, :show, :create, :update]
+    resources :buildings, only: [:index, :show, :create, :update, :destroy]
     resources :custom_fields, only: [:index, :show, :create, :update]
   end
 

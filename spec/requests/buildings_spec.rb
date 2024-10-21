@@ -86,4 +86,71 @@ RSpec.describe BuildingsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE #destroy" do
+    let!(:building) { create(:building, client: client) }
+
+    it "destroys the requested building" do
+      expect {
+        delete :destroy, params: { client_id: client.id, id: building.id }
+      }.to change(Building, :count).by(-1)
+    end
+
+    it "returns a successful response" do
+      delete :destroy, params: { client_id: client.id, id: building.id }
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "returns a success message" do
+      delete :destroy, params: { client_id: client.id, id: building.id }
+      json_response = JSON.parse(response.body)
+      expect(json_response).to have_key("message")
+      expect(json_response["message"]).to eq("Building successfully deleted")
+    end
+
+    context "when the building cannot be found" do
+      it "returns a not found response" do
+        delete :destroy, params: { client_id: client.id, id: 'nonexistent' }
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "returns an error message" do
+        delete :destroy, params: { client_id: client.id, id: 'nonexistent' }
+        json_response = JSON.parse(response.body)
+        expect(json_response).to have_key("error")
+        expect(json_response["error"]).to eq("Building not found")
+      end
+    end
+
+    context "when the client cannot be found" do
+      it "returns a not found response" do
+        delete :destroy, params: { client_id: 'nonexistent', id: building.id }
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "returns an error message" do
+        delete :destroy, params: { client_id: 'nonexistent', id: building.id }
+        json_response = JSON.parse(response.body)
+        expect(json_response).to have_key("error")
+        expect(json_response["error"]).to eq("Building not found")
+      end
+    end
+
+    context "when the building fails to delete" do
+      before do
+        allow_any_instance_of(Building).to receive(:destroy).and_return(false)
+      end
+
+      it "returns an unprocessable entity response" do
+        delete :destroy, params: { client_id: client.id, id: building.id }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "returns error messages" do
+        delete :destroy, params: { client_id: client.id, id: building.id }
+        json_response = JSON.parse(response.body)
+        expect(json_response).to have_key("errors")
+      end
+    end
+  end
 end
