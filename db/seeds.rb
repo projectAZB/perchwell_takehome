@@ -7,7 +7,7 @@ Building.destroy_all
 
 puts "Seeding the database with clients, custom fields, and buildings..."
 
-client_names =  ["Mark Jones", "Tom Dooley", "Stan Folie", "Jon Jackson", "Pierre Janet"]
+client_names =  ["Sigmund Freud", "Carl Jung", "William James", "Ivan Pavlov", "Pierre Janet"]
 clients = []
 
 # Seed Clients
@@ -165,7 +165,7 @@ clients.each do |client|
     Building.create!(
       id: 5,
       client: client,
-      address: "812 Northwood Drive",
+      address: "1 Northwood Drive",
       state: "PA",
       zip_code: "17042",
       custom_field_values: {
@@ -176,7 +176,7 @@ clients.each do |client|
     Building.create!(
       id: 6,
       client: client,
-      address: "12 Nowlen Street",
+      address: "674 Maple Street",
       state: "PA",
       zip_code: "17042",
       custom_field_values: {
