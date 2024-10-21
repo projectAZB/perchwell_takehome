@@ -5,8 +5,7 @@ CustomField.destroy_all
 Building.destroy_all
 
 
-# Create 5 clients
-puts "Seeding the database with clients, buildings and custom fields..."
+puts "Seeding the database with clients, custom fields, and buildings..."
 
 client_names =  ["Mark Jones", "Tom Dooley", "Stan Folie", "Jon Jackson", "Pierre Janet"]
 clients = []
@@ -43,14 +42,14 @@ clients.each do |client|
   if client.id == 2
     CustomField.create!(
       id: 3,
-      name: "Pool",
+      name: "Live-In Super",
       value_type: 2,
       client: client,
       value: "Yes, No"
     )
     CustomField.create!(
       id: 4,
-      name: "Chimneys",
+      name: "Floor",
       value_type: 0,
       client: client,
     )
@@ -104,17 +103,121 @@ clients.each do |client|
     )
     CustomField.create!(
       id: 12,
-      name: "Yard Type",
+      name: "Backyard Type",
       value_type: 2,
       client: client,
-      value: "Grass, Forest, None"
+      value: "Grass, Concrete, None"
     )
   end
 end
 
 # Seed Buildings
 clients.each do |client|
-  
+  if client.id == 1
+    Building.create!(
+      id: 1,
+      client: client,
+      address: "812 Northwood Drive",
+      state: "PA",
+      zip_code: "17042",
+      custom_field_values: {
+        1 => "2",
+        2 => "Brick",
+      }
+    )
+    Building.create!(
+      id: 2,
+      client: client,
+      address: "12 Nowlen Street",
+      state: "PA",
+      zip_code: "17042",
+      custom_field_values: {
+        1 => "1",
+        2 => "Stone",
+      }
+    )
+  end
+  if client.id == 2
+    Building.create!(
+      id: 3,
+      client: client,
+      address: "222 Mulberry Street",
+      state: "NY",
+      zip_code: "10012",
+      custom_field_values: {
+        3 => "No",
+        4 => "3",
+      }
+    )
+    Building.create!(
+      id: 4,
+      client: client,
+      address: "3 Spring Street",
+      state: "NY",
+      zip_code: "10012",
+      custom_field_values: {
+        3 => "Yes",
+        4 => "5",
+      }
+    )
+  end
+  if client.id == 3
+    Building.create!(
+      id: 5,
+      client: client,
+      address: "812 Northwood Drive",
+      state: "PA",
+      zip_code: "17042",
+      custom_field_values: {
+        5 => "20th",
+        6 => "1",
+      }
+    )
+    Building.create!(
+      id: 6,
+      client: client,
+      address: "12 Nowlen Street",
+      state: "PA",
+      zip_code: "17042",
+      custom_field_values: {
+        5 => "21st",
+        6 => "2",
+      }
+    )
+  end
+  if client.id == 4
+    Building.create!(
+      id: 7,
+      client: client,
+      address: "123 Prince Street",
+      state: "NY",
+      zip_code: "10012",
+      custom_field_values: {
+        7 => "500",
+        8 => "Gothic",
+        9 => "10",
+      }
+    )
+  end
+  if client.id == 5
+    floors = ["1", "2", "3", "4", "5"]
+    square_feet = ["200", "300", "400", "500", "600"]
+    yard_types = ["Grass", "Concrete", "None"]
+    # Make a lot of buildings for pagination 
+    25.times do |i|
+      Building.create!(
+        client: client,
+        address: "#{i} Bowery",
+        state: "NY",
+        zip_code: "10012",
+        custom_field_values: {
+          10 => floors.sample,
+          11 => square_feet.sample,
+          12 => yard_types.sample,
+        }
+      )
+    end
+  end
 end
 
 puts "Seeding completed!"

@@ -7,6 +7,7 @@ class BuildingsController < ApplicationController
   def index
     @buildings = @client.buildings.page(params[:page]).per(10)
     render json: {
+      client_name: @client.name,
       buildings: @buildings.as_json(except: [:created_at, :updated_at]),
       total_pages: @buildings.total_pages,
       current_page: @buildings.current_page,

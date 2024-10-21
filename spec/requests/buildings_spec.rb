@@ -19,7 +19,8 @@ RSpec.describe BuildingsController, type: :controller do
       create_list(:building, 15, client: client)
       get :index, params: { client_id: client.id }
       json_response = JSON.parse(response.body)
-      
+
+      expect(json_response["client_name"]).to eq("#{client.name}")
       expect(json_response["buildings"].length).to eq(10)
       expect(json_response["total_pages"]).to eq(2)
       expect(json_response["current_page"]).to eq(1)
