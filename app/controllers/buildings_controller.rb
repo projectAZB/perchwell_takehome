@@ -6,9 +6,19 @@ class BuildingsController < ApplicationController
 
   def index
     @buildings = @client.buildings.page(params[:page]).per(10)
+    custom_fields = @client.custom_fields.pluck(:id, :name).to_h
+
+    buildings_with_custom_fields = @buildings.map do |building|
+      custom_field_values = building.custom_field_values.transform_keys do |custom_field_id|
+        custom_fields[custom_field_id.to_i] || custom_field_id
+      end
+      
+      building.as_json.merge(custom_field_values: custom_field_values)
+    end
+
     render json: {
       client_name: @client.name,
-      buildings: @buildings.as_json(except: [:created_at, :updated_at]),
+      buildings: buildings_with_custom_fields,
       total_pages: @buildings.total_pages,
       current_page: @buildings.current_page,
       total_count: @buildings.total_count
